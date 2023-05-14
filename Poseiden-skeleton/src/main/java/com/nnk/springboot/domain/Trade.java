@@ -13,7 +13,7 @@ public class Trade {
     // TODO: Map columns in data table TRADE with corresponding java fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer tradeId;
+    private Integer id;
     @Column
     private String account;
     @Column
