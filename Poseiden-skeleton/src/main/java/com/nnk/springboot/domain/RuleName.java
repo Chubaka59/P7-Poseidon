@@ -1,9 +1,11 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "rulename")
+@Data
 public class RuleName {
     // TODO: Map columns in data table RULENAME with corresponding java fields
     @Id

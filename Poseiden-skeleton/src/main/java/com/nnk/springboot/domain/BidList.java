@@ -2,11 +2,13 @@ package com.nnk.springboot.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "bidlist")
+@Data
 public class BidList {
     // TODO: Map columns in data table BIDLIST with corresponding java fields
     @Id

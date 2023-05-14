@@ -1,7 +1,9 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.repositories.BidListRepository;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class BidListController {
     // TODO: Inject Bid service
+    @Autowired
+    private BidListRepository bidListRepository;
 
     @RequestMapping("/bidList/list")
     public String home(Model model)
@@ -29,7 +33,11 @@ public class BidListController {
 
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
+        if(!result.hasErrors()) {
+            bidListRepository.save(bid);
+            model.addAttribute("bidList", bidListRepository.findAll());
+            return "redirect:/bidList/list";
+        }
         return "bidList/add";
     }
 
