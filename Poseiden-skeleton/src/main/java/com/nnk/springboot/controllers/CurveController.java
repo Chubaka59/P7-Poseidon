@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 
 @Controller
 public class CurveController {
@@ -19,9 +21,10 @@ public class CurveController {
     private CurvePointRepository curvePointRepository;
 
     @RequestMapping("/curvePoint/list")
-    public String home(Model model)
+    public String home(Model model, Principal principal)
     {
         model.addAttribute("curvePoints", curvePointRepository.findAll());
+        model.addAttribute("username", principal.getName());
         return "curvePoint/list";
     }
 

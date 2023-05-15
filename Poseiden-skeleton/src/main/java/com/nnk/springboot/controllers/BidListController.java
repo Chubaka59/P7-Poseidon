@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 
 @Controller
 public class BidListController {
@@ -19,9 +21,10 @@ public class BidListController {
     private BidListRepository bidListRepository;
 
     @RequestMapping("/bidList/list")
-    public String home(Model model)
+    public String home(Model model, Principal principal)
     {
         model.addAttribute("bidlists", bidListRepository.findAll());
+        model.addAttribute("username", principal.getName());
         return "bidList/list";
     }
 

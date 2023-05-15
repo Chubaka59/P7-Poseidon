@@ -12,15 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 @Controller
 public class TradeController {
     @Autowired
     private TradeRepository tradeRepository;
 
     @RequestMapping("/trade/list")
-    public String home(Model model)
+    public String home(Model model, Principal principal)
     {
         model.addAttribute("trades", tradeRepository.findAll());
+        model.addAttribute("username", principal.getName());
         return "trade/list";
     }
 
