@@ -55,7 +55,7 @@ public class CurveController {
             return "curvePoint/update";
         }
 
-        curvePoint.setCurveId(id);
+        curvePoint.setId(id);
         curvePointRepository.save(curvePoint);
         model.addAttribute("curvePoints", curvePointRepository.findAll());
         return "redirect:/curvePoint/list";

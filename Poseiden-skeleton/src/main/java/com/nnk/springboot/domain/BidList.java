@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 @Table(name = "bidlist")
 @Data
 public class BidList {
-    // TODO: Map columns in data table BIDLIST with corresponding java fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
