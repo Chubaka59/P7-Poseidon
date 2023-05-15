@@ -39,7 +39,7 @@ public class SecurityConfig {
                 )
                 .logout((logout) -> logout
                         .permitAll()
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/app-logout"))
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 );
