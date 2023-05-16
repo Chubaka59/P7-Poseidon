@@ -2,6 +2,7 @@ package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
@@ -9,8 +10,8 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "trade")
 @Data
+@NoArgsConstructor
 public class Trade {
-    // TODO: Map columns in data table TRADE with corresponding java fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -54,4 +55,9 @@ public class Trade {
     private String sourceListId;
     @Column
     private String side;
+
+    public Trade(String account, String type){
+        this.account = account;
+        this.type = type;
+    }
 }
