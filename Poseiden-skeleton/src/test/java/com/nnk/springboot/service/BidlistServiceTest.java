@@ -34,4 +34,17 @@ public class BidlistServiceTest {
         verify(bidListRepository, times(1)).findAll();
         assertEquals(bidLists, actualBidList);
     }
+
+    @Test
+    public void insertTest(){
+        //GIVEN we have a bid to insert
+        BidList bidList = new BidList();
+        when(bidListRepository.save(bidList)).thenReturn(bidList);
+
+        //WHEN the bid is saved
+        bidListService.insert(bidList);
+
+        //THEN the method bidListRepository.save is called
+        verify(bidListRepository, times(1)).save(bidList);
+    }
 }

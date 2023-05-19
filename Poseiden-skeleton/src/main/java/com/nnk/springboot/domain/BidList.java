@@ -1,6 +1,9 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +17,12 @@ public class BidList implements UpdatableEntity<BidList>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer BidListId;
+    @NotBlank
     private String account;
+    @NotBlank
     private String type;
+    @DecimalMin(value = "0.01", message = "Amount can not be equal less than 0")
+    @NotNull
     private Double bidQuantity;
     private Double askQuantity;
     private Double bid;
