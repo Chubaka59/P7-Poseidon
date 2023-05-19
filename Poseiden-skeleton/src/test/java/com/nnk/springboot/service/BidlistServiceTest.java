@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -46,5 +47,32 @@ public class BidlistServiceTest {
 
         //THEN the method bidListRepository.save is called
         verify(bidListRepository, times(1)).save(bidList);
+    }
+
+    @Test
+    public void getByIdTest(){
+        //GIVEN we would find a bid from its id
+        BidList existingBidList = new BidList();
+        when(bidListRepository.findById(anyInt())).thenReturn(Optional.of(existingBidList));
+
+        //WHEN we would find the bid
+        bidListService.getById(1);
+
+        //THEN the method bidListRepository.findById is called
+        verify(bidListRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void updateTest(){
+        //GIVEN we would update a bid
+        BidList existingBidList = new BidList();
+        when(bidListRepository.findById(anyInt())).thenReturn(Optional.of(existingBidList));
+        when(bidListRepository.save(any(BidList.class))).thenReturn(existingBidList);
+
+        //WHEN we try to update the bid
+        bidListService.update(1, existingBidList);
+
+        //THEN the method repository.save is called
+        verify(bidListRepository, times(1)).save(existingBidList);
     }
 }

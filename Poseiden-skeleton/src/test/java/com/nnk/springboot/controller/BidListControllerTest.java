@@ -101,4 +101,63 @@ public class BidListControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void showUpdateFormTest(){
+        //GIVEN we would request to get the update page
+        when(bidListService.getById(anyInt())).thenReturn(any(BidList.class));
+        String excpectedString = "bidList/update";
+
+        //WHEN we request for the page
+        String actualString = bidListController.showUpdateForm(1, model);
+
+        //THEN we get the correct string
+        verify(bidListService, times(1)).getById(1);
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
+    public void updateBidTest(){
+        //GIVEN there is a bid to update
+        BidList bidList = new BidList();
+        when(result.hasErrors()).thenReturn(false);
+        doNothing().when(bidListService).update(1, bidList);
+        when(bidListService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/bidList/list";
+
+        //WHEN we try to update the bid
+        String actualString = bidListController.updateBid(1, bidList, result, model);
+
+        //THEN we get the correct string and the method bidListService.update is called
+        verify(bidListService, times(1)).update(1, bidList);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateBidWhenErrorInTheFormTest(){
+        //GIVEN there is an error in the form
+        when(result.hasErrors()).thenReturn(true);
+        String expectedString = "bidList/update";
+
+        //WHEN we try to update the bid
+        String actualString = bidListController.updateBid(1, new BidList(), result, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateBidWhenErrorIsThrownTest(){
+        //GIVEN an error will be thrown
+        when(result.hasErrors()).thenReturn(false);
+        doThrow(new IllegalArgumentException("testError")).when(bidListService).update(anyInt(), any(BidList.class));
+        String expectedString = "bidList/update";
+
+        //WHEN we try to update the bid
+        String actualString = bidListController.updateBid(1, new BidList(), result, model);
+
+        //THEN an error attribute is added to the model and we get the correct string
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

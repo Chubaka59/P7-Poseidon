@@ -50,6 +50,27 @@ public class BidList implements UpdatableEntity<BidList>{
     }
 
     public BidList update(BidList entity){
+        this.account = entity.account;
+        this.type = entity.type;
+        this.bidQuantity = entity.bidQuantity;
+        this.askQuantity = entity.askQuantity;
+        this.bid = entity.bid;
+        this.ask = entity.ask;
+        this.benchmark = entity.benchmark;
+        this.bidListDate = entity.bidListDate;
+        this.commentary = entity.commentary;
+        this.security = entity.security;
+        this.status = entity.status;
+        this.trader = entity.trader;
+        this.book = entity.book;
+        this.creationName = entity.creationName;
+        this.creationDate = entity.creationDate;
+        this.revisionName = entity.revisionName;
+        this.revisionDate = entity.revisionDate;
+        this.dealName = entity.dealName;
+        this.dealType = entity.dealType;
+        this.sourceListId = entity.sourceListId;
+        this.side = entity.side;
         return this;
     }
 }
