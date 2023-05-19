@@ -1,11 +1,11 @@
 package com.nnk.springboot.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User  implements UpdatableEntity<User> {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
@@ -17,6 +17,15 @@ public class User {
     private String fullname;
     @NotBlank(message = "Role is mandatory")
     private String role;
+
+   public User update(User entity){
+       this.username = entity.getUsername();
+       this.password = entity.getPassword();
+       this.fullname = entity.getFullname();
+       this.role = entity.getRole();
+
+       return this;
+   }
 
     public Integer getId() {
         return id;
@@ -57,4 +66,7 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+
+
 }
