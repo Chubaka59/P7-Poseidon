@@ -34,6 +34,7 @@ public abstract class AbstractCrudService<T extends UpdatableEntity<T>, R extend
 
     @Override
     public void delete(Integer id) {
-        repository.deleteById(id);
+        T entity = getById(id);
+        repository.delete(entity);
     }
 }

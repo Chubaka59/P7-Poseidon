@@ -75,4 +75,18 @@ public class BidlistServiceTest {
         //THEN the method repository.save is called
         verify(bidListRepository, times(1)).save(existingBidList);
     }
+
+    @Test
+    public void deleteTest(){
+        //GIVEN we try to delete a bid
+        BidList existingBidList = new BidList();
+        doNothing().when(bidListRepository).delete(any(BidList.class));
+        when(bidListRepository.findById(anyInt())).thenReturn(Optional.of(existingBidList));
+
+        //WHEN we try to delete the bid
+        bidListService.delete(1);
+
+        //THEN the method bidListRepository.delete is called
+        verify(bidListRepository, times(1)).delete(existingBidList);
+    }
 }

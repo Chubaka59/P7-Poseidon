@@ -160,4 +160,34 @@ public class BidListControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void deleteBidTest(){
+        //GIVEN there is a bid to delete
+        doNothing().when(bidListService).delete(anyInt());
+        when(bidListService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/bidList/list";
+
+        //WHEN we try to delete the bid
+        String actualString = bidListController.deleteBid(1, model);
+
+        //THEN the correct string is returned and the method bidListService.delete is called
+        verify(bidListService, times(1)).delete(1);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void deleteBidWhenBidIsNotFound(){
+        //GIVEN the bid we would delete won't be found
+        doThrow(new IllegalArgumentException("testError")).when(bidListService).delete(anyInt());
+        when(bidListService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "/bidList/list";
+
+        //WHEN we try to delete the bid
+        String actualString = bidListController.deleteBid(1, model);
+
+        //THEN the correct string is returned and the error is added to the model
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

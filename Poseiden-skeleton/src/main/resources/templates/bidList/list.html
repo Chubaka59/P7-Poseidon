@@ -49,6 +49,9 @@
 			</tr>
 			</tbody>
 		</table>
+		<div th:if="${#fields.allErrors()}">
+			<div class="error" th:text="${error}"></div>
+		</div>
 	</div>
 </div>
 </body>
