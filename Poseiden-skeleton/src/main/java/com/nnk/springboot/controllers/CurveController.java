@@ -28,7 +28,7 @@ public class CurveController {
     }
 
     @GetMapping("/curvePoint/add")
-    public String addCurveForm(CurvePoint bid) {
+    public String addCurveForm(CurvePoint curvePoint) {
         return "curvePoint/add";
     }
 
@@ -49,15 +49,24 @@ public class CurveController {
 
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get CurvePoint by Id and to model then show to the form
+        model.addAttribute("curvePoint", curvePointService.getById(id));
         return "curvePoint/update";
     }
 
     @PostMapping("/curvePoint/update/{id}")
     public String updateCurve(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Curve and return Curve list
-        return "redirect:/curvePoint/list";
+        if (result.hasErrors()) {
+            return "curvePoint/update";
+        }
+        try {
+            curvePointService.update(id, curvePoint);
+            model.addAttribute("curvePoints", curvePointService.getAll());
+            return "redirect:/curvePoint/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "curvePoint/update";
+        }
     }
 
     @GetMapping("/curvePoint/delete/{id}")
