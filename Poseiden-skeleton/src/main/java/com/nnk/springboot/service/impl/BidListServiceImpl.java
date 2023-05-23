@@ -4,7 +4,9 @@ import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.service.AbstractCrudService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service("bidListService")
 public class BidListServiceImpl extends AbstractCrudService<BidList, BidListRepository> {
 
