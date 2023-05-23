@@ -12,15 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 @Controller
 public class CurveController {
     @Autowired
     private CrudService<CurvePoint> curvePointService;
 
     @RequestMapping("/curvePoint/list")
-    public String home(Model model)
+    public String home(Model model, Principal principal)
     {
-        // TODO: find all Curve Point, add to model
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("curvePoints", curvePointService.getAll());
         return "curvePoint/list";
     }
 

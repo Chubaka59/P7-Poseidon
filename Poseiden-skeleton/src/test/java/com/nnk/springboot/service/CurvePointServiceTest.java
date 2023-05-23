@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -17,6 +21,20 @@ public class CurvePointServiceTest {
     private CurvePointServiceImpl curvePointService;
     @Mock
     private CurvePointRepository curvePointRepository;
+
+    @Test
+    public void getAllTest(){
+        //GIVEN this should return a list
+        List<CurvePoint> curvePointList = new ArrayList<>();
+        when(curvePointRepository.findAll()).thenReturn(curvePointList);
+
+        //WHEN we call the method to get the list
+        List<CurvePoint> actualCurvePoint = curvePointService.getAll();
+
+        //THEN the list is returned
+        verify(curvePointRepository, times(1)).findAll();
+        assertEquals(curvePointList, actualCurvePoint);
+    }
 
     @Test
     public void insertTest(){

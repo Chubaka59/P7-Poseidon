@@ -32,6 +32,20 @@ public class CurvePointControllerTest {
     private BindingResult result;
 
     @Test
+    public void homeTest(){
+        //GIVEN we would request the home page
+        when(principal.getName()).thenReturn("username");
+        when(curvePointService.getAll()).thenReturn(new ArrayList<>());
+        String excpectedString = "curvePoint/list";
+
+        //WHEN we call the page
+        String actualString = curveController.home(model, principal);
+
+        //THEN the correct string is returned
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
     public void addCurveForm(){
         //GIVEN we should get this string
         String expectedString = "curvePoint/add";
