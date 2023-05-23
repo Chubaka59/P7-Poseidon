@@ -103,4 +103,63 @@ public class CurvePointControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void showUpdateFormTest(){
+        //GIVEN we would request to get the update page
+        when(curvePointService.getById(anyInt())).thenReturn(any(CurvePoint.class));
+        String excpectedString = "curvePoint/update";
+
+        //WHEN we request for the page
+        String actualString = curveController.showUpdateForm(1, model);
+
+        //THEN we get the correct string
+        verify(curvePointService, times(1)).getById(1);
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
+    public void updateCurveTest(){
+        //GIVEN there is a curvePoint to update
+        CurvePoint curvePoint = new CurvePoint();
+        when(result.hasErrors()).thenReturn(false);
+        doNothing().when(curvePointService).update(1, curvePoint);
+        when(curvePointService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/curvePoint/list";
+
+        //WHEN we try to update the curvePoint
+        String actualString = curveController.updateCurve(1, curvePoint, result, model);
+
+        //THEN we get the correct string and the method curvePointService.update is called
+        verify(curvePointService, times(1)).update(1, curvePoint);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateCurveWhenErrorInTheFormTest(){
+        //GIVEN there is an error in the form
+        when(result.hasErrors()).thenReturn(true);
+        String expectedString = "curvePoint/update";
+
+        //WHEN we try to update the curvePoint
+        String actualString = curveController.updateCurve(1, new CurvePoint(), result, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateCurveWhenErrorIsThrownTest(){
+        //GIVEN an error will be thrown
+        when(result.hasErrors()).thenReturn(false);
+        doThrow(new IllegalArgumentException("testError")).when(curvePointService).update(anyInt(), any(CurvePoint.class));
+        String expectedString = "curvePoint/update";
+
+        //WHEN we try to update the curvePoint
+        String actualString = curveController.updateCurve(1, new CurvePoint(), result, model);
+
+        //THEN an error attribute is added to the model and we get the correct string
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

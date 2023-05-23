@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -42,10 +43,37 @@ public class CurvePointServiceTest {
         CurvePoint curvePoint = new CurvePoint();
         when(curvePointRepository.save(curvePoint)).thenReturn(curvePoint);
 
-        //WHEN the bid is saved
+        //WHEN the curvePoint is saved
         curvePointService.insert(curvePoint);
 
-        //THEN the method bidListRepository.save is called
+        //THEN the method curvePointRepository.save is called
         verify(curvePointRepository, times(1)).save(curvePoint);
+    }
+
+    @Test
+    public void getByIdTest(){
+        //GIVEN we would find a curvePoint from its id
+        CurvePoint existingCurvePoint = new CurvePoint();
+        when(curvePointRepository.findById(anyInt())).thenReturn(Optional.of(existingCurvePoint));
+
+        //WHEN we would find the curvePoint
+        curvePointService.getById(1);
+
+        //THEN the method curvePointRepository.findById is called
+        verify(curvePointRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void updateTest(){
+        //GIVEN we would update a curvePoint
+        CurvePoint existingCurvePoint = new CurvePoint();
+        when(curvePointRepository.findById(anyInt())).thenReturn(Optional.of(existingCurvePoint));
+        when(curvePointRepository.save(any(CurvePoint.class))).thenReturn(existingCurvePoint);
+
+        //WHEN we try to update the bid
+        curvePointService.update(1, existingCurvePoint);
+
+        //THEN the method repository.save is called
+        verify(curvePointRepository, times(1)).save(existingCurvePoint);
     }
 }
