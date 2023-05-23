@@ -17,12 +17,12 @@ public class CurvePoint {
     private Integer curveId;
     private Timestamp asOfDate;
     private Double term;
-    private Double value;
+    private Double curveValue;
     private Timestamp creationDate;
 
-    public CurvePoint(Integer curveId, Double term, Double value){
+    public CurvePoint(Integer curveId, Double term, Double curveValue){
         this.curveId = curveId;
         this.term = term;
-        this.value = value;
+        this.curveValue = curveValue;
     }
 }

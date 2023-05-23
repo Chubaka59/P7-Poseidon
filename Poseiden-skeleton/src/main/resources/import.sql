@@ -1,0 +1,1 @@
+insert into bidlist(account, type, bid_Quantity) values ('testAccount', 'testType', 4);

@@ -35,16 +35,17 @@ public class BidListController {
 
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        if (!result.hasErrors()) {
-            try {
-                bidListService.insert(bid);
-                model.addAttribute("bidlists", bidListService.getAll());
-                return "redirect:/bidList/list";
-            } catch (Exception e) {
-                model.addAttribute("error", e.getMessage());
-            }
+        if (result.hasErrors()) {
+            return "bidList/add";
         }
-        return "bidList/add";
+        try {
+            bidListService.insert(bid);
+            model.addAttribute("bidlists", bidListService.getAll());
+            return "redirect:/bidList/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "bidList/add";
+        }
     }
 
     @GetMapping("/bidList/update/{id}")
@@ -56,16 +57,17 @@ public class BidListController {
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
-        if (!result.hasErrors()) {
-            try {
-                bidListService.update(id, bidList);
-                model.addAttribute("bidLists", bidListService.getAll());
-                return "redirect:/bidList/list";
-            } catch (Exception e) {
-                model.addAttribute("error", e.getMessage());
-            }
+        if (result.hasErrors()) {
+            return "bidList/update";
         }
-        return "bidList/update";
+        try {
+            bidListService.update(id, bidList);
+            model.addAttribute("bidLists", bidListService.getAll());
+            return "redirect:/bidList/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "bidList/update";
+        }
     }
 
     @GetMapping("/bidList/delete/{id}")
