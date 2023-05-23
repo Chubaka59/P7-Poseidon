@@ -47,13 +47,13 @@ public class BidListControllerTest {
     @Test
     public void addBidFormTest(){
         //GIVEN we would request to get the addForm page
-        String excpectedString = "bidList/add";
+        String expectedString = "bidList/add";
 
         //WHEN we request for the page
         String actualString = bidListController.addBidForm(new BidList());
 
         //THEN we get the correct string
-        assertEquals(excpectedString, actualString);
+        assertEquals(expectedString, actualString);
     }
 
     @Test
