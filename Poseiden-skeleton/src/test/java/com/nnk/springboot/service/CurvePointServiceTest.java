@@ -76,4 +76,18 @@ public class CurvePointServiceTest {
         //THEN the method repository.save is called
         verify(curvePointRepository, times(1)).save(existingCurvePoint);
     }
+
+    @Test
+    public void deleteTest(){
+        //GIVEN we try to delete a curvePoint
+        CurvePoint existingCurvePoint = new CurvePoint();
+        doNothing().when(curvePointRepository).delete(any(CurvePoint.class));
+        when(curvePointRepository.findById(anyInt())).thenReturn(Optional.of(existingCurvePoint));
+
+        //WHEN we try to delete the curvePoint
+        curvePointService.delete(1);
+
+        //THEN the method curvePointRepository.delete is called
+        verify(curvePointRepository, times(1)).delete(existingCurvePoint);
+    }
 }

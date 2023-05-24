@@ -162,4 +162,34 @@ public class CurvePointControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void deleteCurveTest(){
+        //GIVEN there is a curvePoint to delete
+        doNothing().when(curvePointService).delete(anyInt());
+        when(curvePointService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/curvePoint/list";
+
+        //WHEN we try to delete the curvePoint
+        String actualString = curveController.deleteCurve(1, model);
+
+        //THEN the correct string is returned and the method curvePointService.delete is called
+        verify(curvePointService, times(1)).delete(1);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void deleteCurveWhenCurveIsNotFound(){
+        //GIVEN the curvePoint we would delete won't be found
+        doThrow(new IllegalArgumentException("testError")).when(curvePointService).delete(anyInt());
+        when(curvePointService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "/curvePoint/list";
+
+        //WHEN we try to delete the curvePoint
+        String actualString = curveController.deleteCurve(1, model);
+
+        //THEN the correct string is returned and the error is added to the model
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }
