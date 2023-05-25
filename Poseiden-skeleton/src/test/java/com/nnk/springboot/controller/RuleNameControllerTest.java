@@ -32,6 +32,20 @@ public class RuleNameControllerTest {
     private BindingResult result;
 
     @Test
+    public void homeTest(){
+        //GIVEN we would request the home page
+        when(principal.getName()).thenReturn("username");
+        when(ruleNameService.getAll()).thenReturn(new ArrayList<>());
+        String excpectedString = "ruleName/list";
+
+        //WHEN we call the page
+        String actualString = ruleNameController.home(model, principal);
+
+        //THEN the correct string is returned
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
     public void addRuleFormTest(){
         //GIVEN we would request to get the addForm page
         String expectedString = "ruleName/add";

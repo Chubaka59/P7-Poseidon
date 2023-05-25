@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -17,6 +21,20 @@ public class RuleNameServiceTest {
     private RuleNameServiceImpl ruleNameService;
     @Mock
     private RuleNameRepository ruleNameRepository;
+
+    @Test
+    public void getAllTest(){
+        //GIVEN this should return a list
+        List<RuleName> ruleNameList = new ArrayList<>();
+        when(ruleNameRepository.findAll()).thenReturn(ruleNameList);
+
+        //WHEN we call the method to get the list
+        List<RuleName> actualRuleName = ruleNameService.getAll();
+
+        //THEN the list is returned
+        verify(ruleNameRepository, times(1)).findAll();
+        assertEquals(ruleNameList, actualRuleName);
+    }
 
     @Test
     public void insertTest(){
