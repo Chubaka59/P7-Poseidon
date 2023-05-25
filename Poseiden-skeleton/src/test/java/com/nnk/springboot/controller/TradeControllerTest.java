@@ -103,4 +103,63 @@ public class TradeControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void showUpdateFormTest(){
+        //GIVEN we would request to get the update page
+        when(tradeService.getById(anyInt())).thenReturn(any(Trade.class));
+        String excpectedString = "trade/update";
+
+        //WHEN we request for the page
+        String actualString = tradeController.showUpdateForm(1, model);
+
+        //THEN we get the correct string
+        verify(tradeService, times(1)).getById(1);
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
+    public void updateTradeTest(){
+        //GIVEN there is a trade to update
+        Trade trade = new Trade();
+        when(result.hasErrors()).thenReturn(false);
+        doNothing().when(tradeService).update(1, trade);
+        when(tradeService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/trade/list";
+
+        //WHEN we try to update the trade
+        String actualString = tradeController.updateTrade(1, trade, result, model);
+
+        //THEN we get the correct string and the method tradeService.update is called
+        verify(tradeService, times(1)).update(1, trade);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateTradeWhenErrorInTheFormTest(){
+        //GIVEN there is an error in the form
+        when(result.hasErrors()).thenReturn(true);
+        String expectedString = "trade/update";
+
+        //WHEN we try to update the trade
+        String actualString = tradeController.updateTrade(1, new Trade(), result, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateTradeWhenErrorIsThrownTest(){
+        //GIVEN an error will be thrown
+        when(result.hasErrors()).thenReturn(false);
+        doThrow(new IllegalArgumentException("testError")).when(tradeService).update(anyInt(), any(Trade.class));
+        String expectedString = "trade/update";
+
+        //WHEN we try to update the trade
+        String actualString = tradeController.updateTrade(1, new Trade(), result, model);
+
+        //THEN an error attribute is added to the model and we get the correct string
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

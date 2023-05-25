@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -47,5 +48,32 @@ public class TradeServiceTest {
 
         //THEN the method tradeRepository.save is called
         verify(tradeRepository, times(1)).save(trade);
+    }
+
+    @Test
+    public void getByIdTest(){
+        //GIVEN we would find a trade from its id
+        Trade existingTrade = new Trade();
+        when(tradeRepository.findById(anyInt())).thenReturn(Optional.of(existingTrade));
+
+        //WHEN we would find the trade
+        tradeService.getById(1);
+
+        //THEN the method tradeRepository.findById is called
+        verify(tradeRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void updateTest(){
+        //GIVEN we would update a trade
+        Trade existingTrade = new Trade();
+        when(tradeRepository.findById(anyInt())).thenReturn(Optional.of(existingTrade));
+        when(tradeRepository.save(any(Trade.class))).thenReturn(existingTrade);
+
+        //WHEN we try to update the bid
+        tradeService.update(1, existingTrade);
+
+        //THEN the method repository.save is called
+        verify(tradeRepository, times(1)).save(existingTrade);
     }
 }
