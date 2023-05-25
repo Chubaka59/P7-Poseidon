@@ -1,7 +1,9 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.Rating;
+import com.nnk.springboot.service.CrudService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class RatingController {
-    // TODO: Inject Rating service
+    @Autowired
+    private CrudService<Rating> ratingService;
 
     @RequestMapping("/rating/list")
     public String home(Model model)
@@ -28,8 +31,17 @@ public class RatingController {
 
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
-        return "rating/add";
+        if (result.hasErrors()) {
+            return "rating/add";
+        }
+        try {
+            ratingService.insert(rating);
+            model.addAttribute("ratings", ratingService.getAll());
+            return "redirect:/rating/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "rating/add";
+        }
     }
 
     @GetMapping("/rating/update/{id}")

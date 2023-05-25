@@ -49,6 +49,7 @@ public class BidList implements UpdatableEntity<BidList>{
         this.bidQuantity = bidQuantity;
     }
 
+    @Override
     public BidList update(BidList entity){
         this.account = entity.account;
         this.type = entity.type;
