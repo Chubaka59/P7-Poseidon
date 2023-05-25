@@ -62,8 +62,8 @@ public class CurvePointIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/curvePoint/list"));
 
-        CurvePoint curvePoint = curvePointRepository.findById(1).orElseThrow();
-        assertEquals(1, curvePoint.getCurveId());
+        CurvePoint curvePoint = curvePointRepository.findById(2).orElseThrow();
+        assertEquals(2, curvePoint.getCurveId());
     }
 
     @Test

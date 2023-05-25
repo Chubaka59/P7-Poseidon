@@ -63,7 +63,7 @@ public class BidListIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/bidList/list"));
 
-        BidList bidList = bidListRepository.findById(1).orElseThrow();
+        BidList bidList = bidListRepository.findById(2).orElseThrow();
         assertEquals("testAccount", bidList.getAccount());
     }
 
