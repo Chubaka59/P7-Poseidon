@@ -71,7 +71,14 @@ public class RatingController {
 
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Rating by Id and delete the Rating, return to Rating list
-        return "redirect:/rating/list";
+        try {
+            ratingService.delete(id);
+            model.addAttribute("ratings", ratingService.getAll());
+            return "redirect:/rating/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("ratings", ratingService.getAll());
+            return "/rating/list";
+        }
     }
 }

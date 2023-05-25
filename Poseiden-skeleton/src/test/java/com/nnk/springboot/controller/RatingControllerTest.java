@@ -161,4 +161,34 @@ public class RatingControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void deleteRatingTest(){
+        //GIVEN there is a rating to delete
+        doNothing().when(ratingService).delete(anyInt());
+        when(ratingService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/rating/list";
+
+        //WHEN we try to delete the rating
+        String actualString = ratingController.deleteRating(1, model);
+
+        //THEN the correct string is returned and the method ratingService.delete is called
+        verify(ratingService, times(1)).delete(1);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void deleteRatingWhenRatingIsNotFound(){
+        //GIVEN the rating we would delete won't be found
+        doThrow(new IllegalArgumentException("testError")).when(ratingService).delete(anyInt());
+        when(ratingService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "/rating/list";
+
+        //WHEN we try to delete the rating
+        String actualString = ratingController.deleteRating(1, model);
+
+        //THEN the correct string is returned and the error is added to the model
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

@@ -76,4 +76,18 @@ public class RatingServiceTest {
         //THEN the method repository.save is called
         verify(ratingRepository, times(1)).save(existingRating);
     }
+
+    @Test
+    public void deleteTest(){
+        //GIVEN we try to delete a rating
+        Rating existingRating = new Rating();
+        doNothing().when(ratingRepository).delete(any(Rating.class));
+        when(ratingRepository.findById(anyInt())).thenReturn(Optional.of(existingRating));
+
+        //WHEN we try to delete the bid
+        ratingService.delete(1);
+
+        //THEN the method bidListRepository.delete is called
+        verify(ratingRepository, times(1)).delete(existingRating);
+    }
 }
