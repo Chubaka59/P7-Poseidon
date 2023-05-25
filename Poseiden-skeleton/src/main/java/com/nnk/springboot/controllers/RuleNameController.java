@@ -1,7 +1,9 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.RuleName;
+import com.nnk.springboot.service.CrudService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class RuleNameController {
-    // TODO: Inject RuleName service
+    @Autowired
+    private CrudService<RuleName> ruleNameService;
 
     @RequestMapping("/ruleName/list")
     public String home(Model model)
@@ -28,8 +31,17 @@ public class RuleNameController {
 
     @PostMapping("/ruleName/validate")
     public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return RuleName list
-        return "ruleName/add";
+        if (result.hasErrors()) {
+            return "ruleName/add";
+        }
+        try {
+            ruleNameService.insert(ruleName);
+            model.addAttribute("ruleNames", ruleNameService.getAll());
+            return "redirect:/ruleName/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "ruleName/add";
+        }
     }
 
     @GetMapping("/ruleName/update/{id}")
