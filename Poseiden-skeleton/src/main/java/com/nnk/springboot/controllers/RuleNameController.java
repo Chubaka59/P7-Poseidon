@@ -28,7 +28,7 @@ public class RuleNameController {
     }
 
     @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
+    public String addRuleForm(RuleName ruleName) {
         return "ruleName/add";
     }
 
@@ -49,15 +49,24 @@ public class RuleNameController {
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get RuleName by Id and to model then show to the form
+        model.addAttribute("ruleName", ruleNameService.getById(id));
         return "ruleName/update";
     }
 
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update RuleName and return RuleName list
-        return "redirect:/ruleName/list";
+        if (result.hasErrors()) {
+            return "ruleName/update";
+        }
+        try {
+            ruleNameService.update(id, ruleName);
+            model.addAttribute("ruleName", ruleNameService.getAll());
+            return "redirect:/ruleName/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "ruleName/update";
+        }
     }
 
     @GetMapping("/ruleName/delete/{id}")

@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -47,5 +48,32 @@ public class RuleNameServiceTest {
 
         //THEN the method ruleNameRepository.save is called
         verify(ruleNameRepository, times(1)).save(ruleName);
+    }
+
+    @Test
+    public void getByIdTest(){
+        //GIVEN we would find a ruleName from its id
+        RuleName existingRuleName = new RuleName();
+        when(ruleNameRepository.findById(anyInt())).thenReturn(Optional.of(existingRuleName));
+
+        //WHEN we would find the ruleName
+        ruleNameService.getById(1);
+
+        //THEN the method ruleNameRepository.findById is called
+        verify(ruleNameRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void updateTest(){
+        //GIVEN we would update a ruleName
+        RuleName existingRuleName = new RuleName();
+        when(ruleNameRepository.findById(anyInt())).thenReturn(Optional.of(existingRuleName));
+        when(ruleNameRepository.save(any(RuleName.class))).thenReturn(existingRuleName);
+
+        //WHEN we try to update the bid
+        ruleNameService.update(1, existingRuleName);
+
+        //THEN the method repository.save is called
+        verify(ruleNameRepository, times(1)).save(existingRuleName);
     }
 }

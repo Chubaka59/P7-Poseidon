@@ -83,7 +83,7 @@ public class RuleNameControllerTest {
         //WHEN we try to create the ruleName
         String actualString = ruleNameController.validate(new RuleName(), result, model);
 
-        //THEN the correct string is returned but the bid is not created
+        //THEN the correct string is returned but the ruleName is not created
         verify(ruleNameService, times(0)).insert(any(RuleName.class));
         assertEquals(expectedString, actualString);
     }
@@ -100,6 +100,65 @@ public class RuleNameControllerTest {
         String actualString = ruleNameController.validate(new RuleName(), result, model);
 
         //THEN the error is added to the model and the correct string is returned
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void showUpdateFormTest(){
+        //GIVEN we would request to get the update page
+        when(ruleNameService.getById(anyInt())).thenReturn(any(RuleName.class));
+        String excpectedString = "ruleName/update";
+
+        //WHEN we request for the page
+        String actualString = ruleNameController.showUpdateForm(1, model);
+
+        //THEN we get the correct string
+        verify(ruleNameService, times(1)).getById(1);
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
+    public void updateRuleTest(){
+        //GIVEN there is a ruleName to update
+        RuleName ruleName = new RuleName();
+        when(result.hasErrors()).thenReturn(false);
+        doNothing().when(ruleNameService).update(1, ruleName);
+        when(ruleNameService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/ruleName/list";
+
+        //WHEN we try to update the ruleName
+        String actualString = ruleNameController.updateRuleName(1, ruleName, result, model);
+
+        //THEN we get the correct string and the method ruleNameService.update is called
+        verify(ruleNameService, times(1)).update(1, ruleName);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateRuleWhenErrorInTheFormTest(){
+        //GIVEN there is an error in the form
+        when(result.hasErrors()).thenReturn(true);
+        String expectedString = "ruleName/update";
+
+        //WHEN we try to update the ruleName
+        String actualString = ruleNameController.updateRuleName(1, new RuleName(), result, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateRuleWhenErrorIsThrownTest(){
+        //GIVEN an error will be thrown
+        when(result.hasErrors()).thenReturn(false);
+        doThrow(new IllegalArgumentException("testError")).when(ruleNameService).update(anyInt(), any(RuleName.class));
+        String expectedString = "ruleName/update";
+
+        //WHEN we try to update the ruleName
+        String actualString = ruleNameController.updateRuleName(1, new RuleName(), result, model);
+
+        //THEN an error attribute is added to the model and we get the correct string
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
