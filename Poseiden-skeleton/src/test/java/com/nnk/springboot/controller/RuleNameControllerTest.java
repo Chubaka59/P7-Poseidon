@@ -162,4 +162,34 @@ public class RuleNameControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void deleteRuleTest(){
+        //GIVEN there is a ruleName to delete
+        doNothing().when(ruleNameService).delete(anyInt());
+        when(ruleNameService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/ruleName/list";
+
+        //WHEN we try to delete the ruleName
+        String actualString = ruleNameController.deleteRuleName(1, model);
+
+        //THEN the correct string is returned and the method ruleNameService.delete is called
+        verify(ruleNameService, times(1)).delete(1);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void deleteRuleWhenRuleIsNotFound(){
+        //GIVEN the ruleName we would delete won't be found
+        doThrow(new IllegalArgumentException("testError")).when(ruleNameService).delete(anyInt());
+        when(ruleNameService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "/ruleName/list";
+
+        //WHEN we try to delete the ruleName
+        String actualString = ruleNameController.deleteRuleName(1, model);
+
+        //THEN the correct string is returned and the error is added to the model
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

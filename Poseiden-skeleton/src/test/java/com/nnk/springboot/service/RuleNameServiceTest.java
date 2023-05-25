@@ -76,4 +76,18 @@ public class RuleNameServiceTest {
         //THEN the method repository.save is called
         verify(ruleNameRepository, times(1)).save(existingRuleName);
     }
+
+    @Test
+    public void deleteTest(){
+        //GIVEN we try to delete a ruleName
+        RuleName existingRuleName = new RuleName();
+        doNothing().when(ruleNameRepository).delete(any(RuleName.class));
+        when(ruleNameRepository.findById(anyInt())).thenReturn(Optional.of(existingRuleName));
+
+        //WHEN we try to delete the ruleName
+        ruleNameService.delete(1);
+
+        //THEN the method ruleNameRepository.delete is called
+        verify(ruleNameRepository, times(1)).delete(existingRuleName);
+    }
 }
