@@ -1,6 +1,9 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,12 +14,16 @@ import java.sql.Timestamp;
 @Table(name = "trade")
 @Data
 @NoArgsConstructor
-public class Trade {
+public class Trade implements UpdatableEntity<Trade> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tradeId;
+    @NotBlank
     private String account;
+    @NotBlank
     private String type;
+    @NotNull
+    @DecimalMin(value = "0.01", message = "Amount can not be equal less than 0")
     private Double buyQuantity;
     private Double sellQuantity;
     private Double buyPrice;
@@ -39,5 +46,13 @@ public class Trade {
     public Trade(String account, String type){
         this.account = account;
         this.type = type;
+    }
+
+
+    @Override
+    public Trade update(Trade entity) {
+        this.account = entity.account;
+        this.type = entity.type;
+        return this;
     }
 }
