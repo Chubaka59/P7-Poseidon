@@ -12,15 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 @Controller
 public class TradeController {
     @Autowired
     private CrudService<Trade> tradeService;
 
     @RequestMapping("/trade/list")
-    public String home(Model model)
+    public String home(Model model, Principal principal)
     {
-        // TODO: find all Trade, add to model
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("trades", tradeService.getAll());
         return "trade/list";
     }
 

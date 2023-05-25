@@ -32,6 +32,20 @@ public class TradeControllerTest {
     private BindingResult result;
 
     @Test
+    public void homeTest(){
+        //GIVEN we would request the home page
+        when(principal.getName()).thenReturn("username");
+        when(tradeService.getAll()).thenReturn(new ArrayList<>());
+        String excpectedString = "trade/list";
+
+        //WHEN we call the page
+        String actualString = tradeController.home(model, principal);
+
+        //THEN the correct string is returned
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
     public void addTradeFormTest(){
         //GIVEN we would request to get the addForm page
         String expectedString = "trade/add";
