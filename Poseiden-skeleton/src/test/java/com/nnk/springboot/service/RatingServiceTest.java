@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -17,6 +21,20 @@ public class RatingServiceTest {
     private RatingServiceImpl ratingService;
     @Mock
     private RatingRepository ratingRepository;
+
+    @Test
+    public void getAllTest(){
+        //GIVEN this should return a list
+        List<Rating> ratingList = new ArrayList<>();
+        when(ratingRepository.findAll()).thenReturn(ratingList);
+
+        //WHEN we call the method to get the list
+        List<Rating> actualBidList = ratingService.getAll();
+
+        //THEN the list is returned
+        verify(ratingRepository, times(1)).findAll();
+        assertEquals(ratingList, actualBidList);
+    }
 
     @Test
     public void insertTest(){

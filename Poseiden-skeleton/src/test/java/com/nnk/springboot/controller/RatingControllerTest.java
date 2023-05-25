@@ -31,6 +31,20 @@ public class RatingControllerTest {
     private BindingResult result;
 
     @Test
+    public void homeTest(){
+        //GIVEN we would request the home page
+        when(principal.getName()).thenReturn("username");
+        when(ratingService.getAll()).thenReturn(new ArrayList<>());
+        String excpectedString = "rating/list";
+
+        //WHEN we call the page
+        String actualString = ratingController.home(model, principal);
+
+        //THEN the correct string is returned
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
     public void addRatingFormTest(){
         //GIVEN we would request to get the addForm page
         String expectedString = "rating/add";
