@@ -1,8 +1,9 @@
 package com.nnk.springboot;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Created by Khang Nguyen.
@@ -10,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * Date: 09/03/2019
  * Time: 11:26 AM
  */
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
 public class PasswordEncodeTest {
     @Test
     public void testPassword() {
