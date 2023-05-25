@@ -102,4 +102,63 @@ public class RatingControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void showUpdateFormTest(){
+        //GIVEN we would request to get the update page
+        when(ratingService.getById(anyInt())).thenReturn(any(Rating.class));
+        String excpectedString = "rating/update";
+
+        //WHEN we request for the page
+        String actualString = ratingController.showUpdateForm(1, model);
+
+        //THEN we get the correct string
+        verify(ratingService, times(1)).getById(1);
+        assertEquals(excpectedString, actualString);
+    }
+
+    @Test
+    public void updateRatingTest(){
+        //GIVEN there is a rating to update
+        Rating rating = new Rating();
+        when(result.hasErrors()).thenReturn(false);
+        doNothing().when(ratingService).update(1, rating);
+        when(ratingService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/rating/list";
+
+        //WHEN we try to update the rating
+        String actualString = ratingController.updateRating(1, rating, result, model);
+
+        //THEN we get the correct string and the method bidListService.update is called
+        verify(ratingService, times(1)).update(1, rating);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateRatingWhenErrorInTheFormTest(){
+        //GIVEN there is an error in the form
+        when(result.hasErrors()).thenReturn(true);
+        String expectedString = "rating/update";
+
+        //WHEN we try to update the rating
+        String actualString = ratingController.updateRating(1, new Rating(), result, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateRatingWhenErrorIsThrownTest(){
+        //GIVEN an error will be thrown
+        when(result.hasErrors()).thenReturn(false);
+        doThrow(new IllegalArgumentException("testError")).when(ratingService).update(anyInt(), any(Rating.class));
+        String expectedString = "rating/update";
+
+        //WHEN we try to update the rating
+        String actualString = ratingController.updateRating(1, new Rating(), result, model);
+
+        //THEN an error attribute is added to the model and we get the correct string
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

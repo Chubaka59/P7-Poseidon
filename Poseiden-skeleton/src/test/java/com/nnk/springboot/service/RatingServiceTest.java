@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -47,5 +48,32 @@ public class RatingServiceTest {
 
         //THEN the method bidListRepository.save is called
         verify(ratingRepository, times(1)).save(rating);
+    }
+
+    @Test
+    public void getByIdTest(){
+        //GIVEN we would find a bid from its id
+        Rating existingRating = new Rating();
+        when(ratingRepository.findById(anyInt())).thenReturn(Optional.of(existingRating));
+
+        //WHEN we would find the bid
+        ratingService.getById(1);
+
+        //THEN the method bidListRepository.findById is called
+        verify(ratingRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void updateTest(){
+        //GIVEN we would update a bid
+        Rating existingRating = new Rating();
+        when(ratingRepository.findById(anyInt())).thenReturn(Optional.of(existingRating));
+        when(ratingRepository.save(any(Rating.class))).thenReturn(existingRating);
+
+        //WHEN we try to update the bid
+        ratingService.update(1, existingRating);
+
+        //THEN the method repository.save is called
+        verify(ratingRepository, times(1)).save(existingRating);
     }
 }
