@@ -162,4 +162,34 @@ public class TradeControllerTest {
         verify(model, times(1)).addAttribute("error", "testError");
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void deleteTradeTest(){
+        //GIVEN there is a trade to delete
+        doNothing().when(tradeService).delete(anyInt());
+        when(tradeService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/trade/list";
+
+        //WHEN we try to delete the trade
+        String actualString = tradeController.deleteTrade(1, model);
+
+        //THEN the correct string is returned and the method bidListService.delete is called
+        verify(tradeService, times(1)).delete(1);
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void deleteTradeWhenTradeIsNotFound(){
+        //GIVEN the trade we would delete won't be found
+        doThrow(new IllegalArgumentException("testError")).when(tradeService).delete(anyInt());
+        when(tradeService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "/trade/list";
+
+        //WHEN we try to delete the trade
+        String actualString = tradeController.deleteTrade(1, model);
+
+        //THEN the correct string is returned and the error is added to the model
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }

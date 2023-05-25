@@ -76,4 +76,18 @@ public class TradeServiceTest {
         //THEN the method repository.save is called
         verify(tradeRepository, times(1)).save(existingTrade);
     }
+
+    @Test
+    public void deleteTest(){
+        //GIVEN we try to delete a trade
+        Trade existingTrade = new Trade();
+        doNothing().when(tradeRepository).delete(any(Trade.class));
+        when(tradeRepository.findById(anyInt())).thenReturn(Optional.of(existingTrade));
+
+        //WHEN we try to delete the trade
+        tradeService.delete(1);
+
+        //THEN the method tradeRepository.delete is called
+        verify(tradeRepository, times(1)).delete(existingTrade);
+    }
 }
