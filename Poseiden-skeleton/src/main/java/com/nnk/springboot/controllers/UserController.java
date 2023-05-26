@@ -24,7 +24,7 @@ public class UserController {
     @RequestMapping("/user/list")
     public String home(Model model)
     {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.getAll());
         return "user/list";
     }
 

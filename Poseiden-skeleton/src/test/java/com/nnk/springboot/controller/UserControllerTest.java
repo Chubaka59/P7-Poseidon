@@ -30,6 +30,18 @@ public class UserControllerTest {
     private BindingResult result;
 
     @Test
+    public void homeTest(){
+        //GIVEN we would get the add user page
+        String expectedString = "user/list";
+
+        //WHEN we call the method
+        String actualString = userController.home(model);
+
+        //THEN we get the correct String
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
     public void addUserTest(){
         //GIVEN we would get the add user page
         String expectedString = "user/add";

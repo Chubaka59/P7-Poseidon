@@ -10,8 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -23,6 +26,20 @@ public class UserServiceTest {
     private UserServiceImpl userService;
     @Mock
     private UserRepository userRepository;
+
+    @Test
+    public void getAllTest(){
+        //GIVEN this should return a list
+        List<User> userList = new ArrayList<>();
+        when(userRepository.findAll()).thenReturn(userList);
+
+        //WHEN we call the method to get the list
+        List<User> actualBidList = userService.getAll();
+
+        //THEN the list is returned
+        verify(userRepository, times(1)).findAll();
+        assertEquals(userList, actualBidList);
+    }
 
     @Test
     public void insertTest(){
