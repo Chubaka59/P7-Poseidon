@@ -2,6 +2,7 @@ package com.nnk.springboot.it;
 
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -53,6 +54,10 @@ public class BidListIT {
     @Test
     @WithUserDetails
     public void addBidTest() throws Exception {
+        // GIVEN
+        int initialCount = bidListRepository.findAll().size();
+
+        // WHEN
         mockMvc.perform(post("/bidList/validate")
                         .param("account", "testAccount")
                         .param("type", "testType")
@@ -63,8 +68,7 @@ public class BidListIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/bidList/list"));
 
-        BidList bidList = bidListRepository.findById(2).orElseThrow();
-        assertEquals("testAccount", bidList.getAccount());
+        Assertions.assertThat(bidListRepository.findAll().size()).isEqualTo(initialCount + 1);
     }
 
     @Test

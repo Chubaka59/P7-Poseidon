@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,10 +24,13 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTest {
-    @InjectMocks
-    private UserServiceImpl userService;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @InjectMocks
+    private UserServiceImpl userService;
 
     @Test
     public void getAllTest(){
@@ -44,15 +49,22 @@ public class UserServiceTest {
     @Test
     public void insertTest(){
         //GIVEN we would add a new user
-        User userToAdd = new User(null, null, "testPassword", null, null);
+        final User userToAdd = new User(null, "username", "testPassword", "fullname", "ADMIN");
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(userToAdd);
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0] + "Encoded");
 
         //WHEN we try to add the user
-        userService.insert(userToAdd);
+        final User response = userService.insert(userToAdd);
 
         //THEN the method userRepository.save is called
-        verify(userRepository, times(1)).save(userToAdd);
+        verify(passwordEncoder, times(1)).encode(anyString());
+        verify(userRepository, times(1)).save(any(User.class));
+        assertThat(response).isNotNull()
+                .satisfies(r -> {
+                    assertThat(r.getUsername()).isEqualTo(userToAdd.getUsername());
+                    assertThat(r.getPassword()).isEqualTo("testPasswordEncoded" );
+                });
     }
 
     @Test
