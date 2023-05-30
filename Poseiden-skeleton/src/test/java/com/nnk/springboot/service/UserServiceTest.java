@@ -76,4 +76,54 @@ public class UserServiceTest {
         //WHEN we try to add the user THEN an exception is thrown
         assertThrows(UsernameAlreadyExistException.class, () -> userService.insert(userToAdd));
     }
+
+    @Test
+    public void getByIdTest(){
+        //GIVEN we would find a user from its id
+        User existingUser = new User();
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(existingUser));
+
+        //WHEN we would find the user
+        userService.getById(1);
+
+        //THEN the method userRepository.findById is called
+        verify(userRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void getByIdWhenNotFoundTest(){
+        //GIVEN the user won't be found
+        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        //WHEN we call the method THEN an exception is thrown
+        assertThrows(IllegalArgumentException.class, () -> userService.getById(1));
+    }
+
+    @Test
+    public void updateTest(){
+        //GIVEN we will update the user
+        User entity = new User(null, "updatedUsername", "updatedPassword", "updatedFullname", "updatedRole");
+        User entityToUpdate = new User(null, "username", "password", "fullname", "role");
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(entityToUpdate));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(userRepository.save(any(User.class))).thenReturn(entity);
+
+        //WHEN we try to update the user
+        userService.update(1, entity);
+
+        //THEN the user is saved
+        verify(userRepository, times(1)).save(entityToUpdate);
+    }
+
+    @Test
+    public void updateWhenUsernameIsAlreadyUseTest(){
+        //GIVEN the username is already used
+        User entity = new User(null, "updatedUsername", "updatedPassword", "updatedFullname", "updatedRole");
+        User entityToUpdate = new User(null, "username", "password", "fullname", "role");
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(entity));
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(entityToUpdate));
+
+        //WHEN we try to update the user THEN an exception is thrown
+        assertThrows(RuntimeException.class, () -> userService.update(1, entity));
+    }
 }

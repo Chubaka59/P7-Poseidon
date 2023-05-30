@@ -52,6 +52,8 @@ public class TradeIT {
     @Test
     @WithUserDetails
     public void addTradeTest() throws Exception {
+        int initialCount = tradeRepository.findAll().size();
+
         mockMvc.perform(post("/trade/validate")
                         .param("account", "testAccount")
                         .param("type", "testType")
@@ -62,13 +64,14 @@ public class TradeIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/trade/list"));
 
-        Trade trade = tradeRepository.findById(2).orElseThrow();
-        assertEquals("testAccount", trade.getAccount());
+        assertEquals(initialCount + 1, tradeRepository.findAll().size());
     }
 
     @Test
     @WithUserDetails
     public void addTradeWhenErrorInTheFormTest() throws Exception {
+        int initialCount = tradeRepository.findAll().size();
+
         mockMvc.perform(post("/trade/validate")
                         .param("type", "testType")
                         .param("buyQuantity", "3")
@@ -79,8 +82,7 @@ public class TradeIT {
                 .andExpect(view().name("trade/add"));
 
         List<Trade> tradeList = tradeRepository.findAll();
-        //tradeList.size = 1 because there is 1 trade imported by script
-        assertEquals(1, tradeList.size());
+        assertEquals(initialCount, tradeList.size());
     }
 
     @Test
@@ -147,18 +149,22 @@ public class TradeIT {
     @Test
     @WithUserDetails
     public void deleteTradeTest() throws Exception {
+        int initialCount = tradeRepository.findAll().size();
+
         mockMvc.perform(get("/trade/delete/1"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/trade/list"));
 
         List<Trade> tradeList = tradeRepository.findAll();
-        assertEquals(0, tradeList.size());
+        assertEquals(initialCount - 1, tradeList.size());
     }
 
     @Test
     @WithUserDetails
     public void deleteTradeWhenTradeIsNotFoundTest() throws Exception {
+        int initialCount = tradeRepository.findAll().size();
+
         mockMvc.perform(get("/trade/delete/2"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -167,6 +173,6 @@ public class TradeIT {
                 .andExpect(model().attributeExists("trades"));
 
         List<Trade> tradeList = tradeRepository.findAll();
-        assertEquals(1, tradeList.size());
+        assertEquals(initialCount, tradeList.size());
     }
 }

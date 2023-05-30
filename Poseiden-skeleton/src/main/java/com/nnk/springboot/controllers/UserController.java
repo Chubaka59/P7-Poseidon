@@ -5,7 +5,6 @@ import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.service.CrudService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,7 +49,7 @@ public class UserController {
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        User user = userService.getById(id);
         user.setPassword("");
         model.addAttribute("user", user);
         return "user/update";
@@ -62,13 +61,14 @@ public class UserController {
         if (result.hasErrors()) {
             return "user/update";
         }
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setId(id);
-        userRepository.save(user);
-        model.addAttribute("users", userRepository.findAll());
-        return "redirect:/user/list";
+        try {
+            userService.update(id, user);
+            model.addAttribute("users", userService.getAll());
+            return "redirect:/user/list";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "user/update";
+        }
     }
 
     @GetMapping("/user/delete/{id}")

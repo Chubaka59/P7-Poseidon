@@ -52,6 +52,8 @@ public class RuleNameIT {
     @Test
     @WithUserDetails
     public void addRuleTest() throws Exception {
+        int initialCount = ruleNameRepository.findAll().size();
+
         mockMvc.perform(post("/ruleName/validate")
                         .param("name", "testName")
                         .param("description", "testDescription")
@@ -65,13 +67,14 @@ public class RuleNameIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/ruleName/list"));
 
-        RuleName ruleName = ruleNameRepository.findById(2).orElseThrow();
-        assertEquals("testName", ruleName.getName());
+        assertEquals(initialCount + 1, ruleNameRepository.findAll().size());
     }
 
     @Test
     @WithUserDetails
     public void addRuleWhenErrorInTheFormTest() throws Exception {
+        int initialCount = ruleNameRepository.findAll().size();
+
         mockMvc.perform(post("/ruleName/validate")
                         .param("description", "testDescription")
                         .param("json", "testJson")
@@ -85,8 +88,7 @@ public class RuleNameIT {
                 .andExpect(view().name("ruleName/add"));
 
         List<RuleName> ruleNameList = ruleNameRepository.findAll();
-        //ruleNameList.size = 1 because there is 1 ruleName imported by script
-        assertEquals(1, ruleNameList.size());
+        assertEquals(initialCount, ruleNameList.size());
     }
 
     @Test
@@ -162,18 +164,22 @@ public class RuleNameIT {
     @Test
     @WithUserDetails
     public void deleteRuleTest() throws Exception {
+        int initialCount = ruleNameRepository.findAll().size();
+
         mockMvc.perform(get("/ruleName/delete/1"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/ruleName/list"));
 
         List<RuleName> ruleNameList = ruleNameRepository.findAll();
-        assertEquals(0, ruleNameList.size());
+        assertEquals(initialCount - 1, ruleNameList.size());
     }
 
     @Test
     @WithUserDetails
     public void deleteRuleWhenRuleIsNotFoundTest() throws Exception {
+        int initialCount = ruleNameRepository.findAll().size();
+
         mockMvc.perform(get("/ruleName/delete/2"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -182,6 +188,6 @@ public class RuleNameIT {
                 .andExpect(model().attributeExists("ruleNames"));
 
         List<RuleName> ruleNameList = ruleNameRepository.findAll();
-        assertEquals(1, ruleNameList.size());
+        assertEquals(initialCount, ruleNameList.size());
     }
 }

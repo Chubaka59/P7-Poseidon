@@ -55,7 +55,9 @@
 
 		</form>
 	</div>
-
+	<div th:if="${#fields.allErrors()}">
+		<div class="error" th:text="${error}"></div>
+	</div>
 </div>
 </body>
 </html>

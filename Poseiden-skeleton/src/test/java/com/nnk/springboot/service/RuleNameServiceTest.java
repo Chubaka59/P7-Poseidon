@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -61,6 +62,15 @@ public class RuleNameServiceTest {
 
         //THEN the method ruleNameRepository.findById is called
         verify(ruleNameRepository, times(1)).findById(1);
+    }
+
+    @Test
+    public void getByIdWhenNotFoundTest(){
+        //GIVEN the user won't be found
+        when(ruleNameRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        //WHEN we call the method THEN an exception is thrown
+        assertThrows(IllegalArgumentException.class, () -> ruleNameService.getById(1));
     }
 
     @Test

@@ -74,6 +74,8 @@ public class BidListIT {
     @Test
     @WithUserDetails
     public void addBidWhenErrorInTheFormTest() throws Exception {
+        int initialCount = bidListRepository.findAll().size();
+
         mockMvc.perform(post("/bidList/validate")
                         .param("type", "testType")
                         .param("bidQuantity", "3")
@@ -83,9 +85,7 @@ public class BidListIT {
                 .andExpect(status().isOk())
                 .andExpect(view().name("bidList/add"));
 
-        List<BidList> bidLists = bidListRepository.findAll();
-        //bidList.size = 1 because there is 1 bid imported by script
-        assertEquals(1, bidLists.size());
+        assertEquals(initialCount, bidListRepository.findAll().size());
     }
 
     @Test
@@ -152,18 +152,22 @@ public class BidListIT {
     @Test
     @WithUserDetails
     public void deleteBidTest() throws Exception {
+        int initialCount = bidListRepository.findAll().size();
+
         mockMvc.perform(get("/bidList/delete/1"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/bidList/list"));
 
         List<BidList> bidLists = bidListRepository.findAll();
-        assertEquals(0, bidLists.size());
+        assertEquals(initialCount - 1, bidLists.size());
     }
 
     @Test
     @WithUserDetails
     public void deleteBidWhenBidIsNotFoundTest() throws Exception {
+        int initialCount = bidListRepository.findAll().size();
+
         mockMvc.perform(get("/bidList/delete/2"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -172,6 +176,6 @@ public class BidListIT {
                 .andExpect(model().attributeExists("bidlists"));
 
         List<BidList> bidLists = bidListRepository.findAll();
-        assertEquals(1, bidLists.size());
+        assertEquals(initialCount, bidLists.size());
     }
 }

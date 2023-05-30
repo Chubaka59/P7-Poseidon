@@ -98,4 +98,60 @@ public class UserControllerTest {
         assertEquals(expectedString, actualString);
         verify(model, times(1)).addAttribute("error", "test");
     }
+
+    @Test
+    public void showUpdateFormTest(){
+        //GIVEN we should get this string
+        when(userService.getById(anyInt())).thenReturn(new User());
+        String expectedString = "user/update";
+
+        //WHEN we call the method
+        String actualString = userController.showUpdateForm(1, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateUserTest(){
+        //GIVEN we will update a user
+        when(result.hasErrors()).thenReturn(false);
+        doNothing().when(userService).update(anyInt(), any(User.class));
+        when(userService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "redirect:/user/list";
+
+        //WHEN we try to update the use
+        String actualString = userController.updateUser(1, new User(), result, model);
+
+        //THEN we get the correct string and the method userService.update is called
+        assertEquals(expectedString, actualString);
+        verify(userService, times(1)).update(anyInt(), any(User.class));
+    }
+
+    @Test
+    public void updateUserWhenErrorInTheFormTest(){
+        //GIVEN there is an error in the form
+        when(result.hasErrors()).thenReturn(true);
+        String expectedString = "user/update";
+
+        //WHEN we try to update a user
+        String actualString = userController.updateUser(1, new User(), result, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void updateUserWhenAnExceptionIsThrownTest(){
+        //GIVEN an error will be thrown
+        when(result.hasErrors()).thenReturn(false);
+        doThrow(new RuntimeException()).when(userService).update(anyInt(), any(User.class));
+        String expectedString = "user/update";
+
+        //WHEN we try to update a user
+        String actualString = userController.updateUser(1, new User(), result, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+    }
 }

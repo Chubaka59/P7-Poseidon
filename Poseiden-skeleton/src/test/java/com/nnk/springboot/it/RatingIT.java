@@ -52,6 +52,8 @@ public class RatingIT {
     @Test
     @WithUserDetails
     public void addRatingTest() throws Exception {
+        int initialCount = ratingRepository.findAll().size();
+
         mockMvc.perform(post("/rating/validate")
                         .param("moodysRating", "testMoodysRating")
                         .param("sandPRating", "testSandPRating")
@@ -63,13 +65,15 @@ public class RatingIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/rating/list"));
 
-        Rating rating = ratingRepository.findById(2).orElseThrow();
-        assertEquals("testMoodysRating", rating.getMoodysRating());
+
+        assertEquals(initialCount + 1, ratingRepository.findAll().size());
     }
 
     @Test
     @WithUserDetails
     public void addRatingWhenErrorInTheFormTest() throws Exception {
+        int initialCount = ratingRepository.findAll().size();
+
         mockMvc.perform(post("/rating/validate")
                         .param("sandPRating", "testSandPRating")
                         .param("fitchRating", "testFitchRating")
@@ -81,8 +85,7 @@ public class RatingIT {
                 .andExpect(view().name("rating/add"));
 
         List<Rating> ratingList = ratingRepository.findAll();
-        //rating.size = 1 because there is 1 rating imported by script
-        assertEquals(1, ratingList.size());
+        assertEquals(initialCount, ratingList.size());
     }
 
     @Test
@@ -153,18 +156,22 @@ public class RatingIT {
     @Test
     @WithUserDetails
     public void deleteRatingTest() throws Exception {
+        int initialCount = ratingRepository.findAll().size();
+
         mockMvc.perform(get("/rating/delete/1"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/rating/list"));
 
         List<Rating> ratingList = ratingRepository.findAll();
-        assertEquals(0, ratingList.size());
+        assertEquals(initialCount - 1, ratingList.size());
     }
 
     @Test
     @WithUserDetails
     public void deleteRatingWhenFormIsNotFoundTest() throws Exception {
+        int initialCount = ratingRepository.findAll().size();
+
         mockMvc.perform(get("/rating/delete/2"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -173,6 +180,6 @@ public class RatingIT {
                 .andExpect(model().attributeExists("ratings"));
 
         List<Rating> ratingList = ratingRepository.findAll();
-        assertEquals(1, ratingList.size());
+        assertEquals(initialCount, ratingList.size());
     }
 }

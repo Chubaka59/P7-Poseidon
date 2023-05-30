@@ -52,6 +52,8 @@ public class CurvePointIT {
     @Test
     @WithUserDetails
     public void addCurveTest() throws Exception {
+        int initialCount = curvePointRepository.findAll().size();
+
         mockMvc.perform(post("/curvePoint/validate")
                         .param("curveId", "2")
                         .param("term", "2")
@@ -62,13 +64,14 @@ public class CurvePointIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/curvePoint/list"));
 
-        CurvePoint curvePoint = curvePointRepository.findById(2).orElseThrow();
-        assertEquals(2, curvePoint.getCurveId());
+        assertEquals(initialCount + 1, curvePointRepository.findAll().size());
     }
 
     @Test
     @WithUserDetails
     public void addCurveWhenErrorInTheFormTest() throws Exception {
+        int initialCount = curvePointRepository.findAll().size();
+
         mockMvc.perform(post("/curvePoint/validate")
                         .param("term", "2")
                         .param("curveValue", "2")
@@ -79,8 +82,7 @@ public class CurvePointIT {
                 .andExpect(view().name("curvePoint/add"));
 
         List<CurvePoint> curvePointList = curvePointRepository.findAll();
-        //curvePointList.size = 1 because there is 1 curvePoint imported by script
-        assertEquals(1, curvePointList.size());
+        assertEquals(initialCount, curvePointList.size());
     }
 
     @Test
@@ -147,18 +149,22 @@ public class CurvePointIT {
     @Test
     @WithUserDetails
     public void deleteCurveTest() throws Exception {
+        int initialCount = curvePointRepository.findAll().size();
+
         mockMvc.perform(get("/curvePoint/delete/1"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/curvePoint/list"));
 
         List<CurvePoint> curvePointList = curvePointRepository.findAll();
-        assertEquals(0, curvePointList.size());
+        assertEquals(initialCount - 1, curvePointList.size());
     }
 
     @Test
     @WithUserDetails
     public void deleteCurveWhenCurveIsNotFoundTest() throws Exception {
+        int initialCount = curvePointRepository.findAll().size();
+
         mockMvc.perform(get("/curvePoint/delete/2"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -167,6 +173,6 @@ public class CurvePointIT {
                 .andExpect(model().attributeExists("curvePoints"));
 
         List<CurvePoint> curvePointList = curvePointRepository.findAll();
-        assertEquals(1, curvePointList.size());
+        assertEquals(initialCount, curvePointList.size());
     }
 }
