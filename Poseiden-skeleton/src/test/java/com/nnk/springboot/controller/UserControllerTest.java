@@ -154,4 +154,19 @@ public class UserControllerTest {
         //THEN we get the correct string
         assertEquals(expectedString, actualString);
     }
+
+    @Test
+    public void deleteUserTest(){
+        //GIVEN we would delete a user
+        String expectedString = "redirect:/user/list";
+        when(userService.getAll()).thenReturn(new ArrayList<>());
+        doNothing().when(userService).delete(anyInt());
+
+        //WHEN we try to delete the user
+        String actualString = userController.deleteUser(1, model);
+
+        //THEN we get the correct string
+        assertEquals(expectedString, actualString);
+        verify(userService, times(1)).delete(anyInt());
+    }
 }

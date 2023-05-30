@@ -39,11 +39,11 @@ public class UserServiceTest {
         when(userRepository.findAll()).thenReturn(userList);
 
         //WHEN we call the method to get the list
-        List<User> actualBidList = userService.getAll();
+        List<User> actualUserList = userService.getAll();
 
         //THEN the list is returned
         verify(userRepository, times(1)).findAll();
-        assertEquals(userList, actualBidList);
+        assertEquals(userList, actualUserList);
     }
 
     @Test
@@ -125,5 +125,19 @@ public class UserServiceTest {
 
         //WHEN we try to update the user THEN an exception is thrown
         assertThrows(RuntimeException.class, () -> userService.update(1, entity));
+    }
+
+    @Test
+    public void deleteTest(){
+        //GIVEN we try to delete a user
+        User existingUser = new User();
+        doNothing().when(userRepository).delete(any(User.class));
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(existingUser));
+
+        //WHEN we try to delete the user
+        userService.delete(1);
+
+        //THEN the method userRepository.delete is called
+        verify(userRepository, times(1)).delete(existingUser);
     }
 }
