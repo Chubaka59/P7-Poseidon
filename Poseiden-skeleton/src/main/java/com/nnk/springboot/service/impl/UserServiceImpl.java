@@ -35,7 +35,7 @@ public class UserServiceImpl extends AbstractCrudService<User, UserRepository> {
     @Override
     public void update(Integer id, User entity) {
         User updatedEntity = getById(id);
-        if(!usernameIsNotUsedOrBlank(entity, updatedEntity)){
+        if(!usernameIsNotUsedAndBlank(entity, updatedEntity)){
             throw new RuntimeException("An user can not be updated with an existing username");
         }
         entity.setPassword(this.encoder.encode(entity.getPassword()));
@@ -43,7 +43,7 @@ public class UserServiceImpl extends AbstractCrudService<User, UserRepository> {
         repository.save(updatedEntity);
     }
 
-    private boolean usernameIsNotUsedOrBlank(User entity, User updatedEntity) {
+    private boolean usernameIsNotUsedAndBlank(User entity, User updatedEntity) {
         boolean isNotUsed;
         boolean isNotBlank = entity.getUsername() != null
                 && !entity.getUsername().isBlank();

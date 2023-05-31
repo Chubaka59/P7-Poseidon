@@ -7,3 +7,6 @@ insert into rating(moodys_rating, sandprating, fitch_rating, order_number) value
 insert into rulename(name, description, json, template, sql_str, sql_part) values ('testName', 'testDescription', 'testJson', 'testTemplate', 'testSqlStr', 'testSqlPart');
 
 insert into trade(account, type, buy_quantity) values ('testAccount', 'testType', 2);
+
+insert into users(username, password, fullname, role) values('testUsername', 'testPassword', 'testFullname', 'testRole');
+insert into users(username, password, fullname, role) values('testUpdate', 'testUpdate', 'testUpdate', 'testUpdate');
