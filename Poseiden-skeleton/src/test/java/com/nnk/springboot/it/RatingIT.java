@@ -30,7 +30,7 @@ public class RatingIT {
     private RatingRepository ratingRepository;
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void homeTest() throws Exception {
         mockMvc.perform(get("/rating/list"))
                 .andDo(MockMvcResultHandlers.print())
@@ -41,7 +41,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addRatingFormTest() throws Exception {
         mockMvc.perform(get("/rating/add"))
                 .andDo(MockMvcResultHandlers.print())
@@ -50,7 +50,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addRatingTest() throws Exception {
         int initialCount = ratingRepository.findAll().size();
 
@@ -70,7 +70,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addRatingWhenErrorInTheFormTest() throws Exception {
         int initialCount = ratingRepository.findAll().size();
 
@@ -89,7 +89,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void showUpdateFormTest() throws Exception {
         mockMvc.perform(get("/rating/update/1"))
                 .andDo(MockMvcResultHandlers.print())
@@ -98,7 +98,7 @@ public class RatingIT {
                 .andExpect(view().name("rating/update"));
     }
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateRatingTest() throws Exception {
         Rating ratingToUpdate = new Rating("testUpdateMoodysRating", "testUpdateSandPRating", "testUpdateFitchRating", 2);
 
@@ -121,7 +121,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateRatingWhenErrorInTheFormTest() throws Exception {
         mockMvc.perform(post("/rating/update/1")
                         .param("sandPRating", "testNotUpdatedSandPRating")
@@ -138,7 +138,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateRatingWhenRatingDoesNotExistTest() throws Exception {
         mockMvc.perform(post("/rating/update/10")
                         .param("moodysRating", "testNotUpdatedMoodysRating")
@@ -154,7 +154,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteRatingTest() throws Exception {
         int initialCount = ratingRepository.findAll().size();
 
@@ -168,7 +168,7 @@ public class RatingIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteRatingWhenFormIsNotFoundTest() throws Exception {
         int initialCount = ratingRepository.findAll().size();
 

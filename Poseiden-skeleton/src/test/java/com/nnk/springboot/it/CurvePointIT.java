@@ -30,7 +30,7 @@ public class CurvePointIT {
     private CurvePointRepository curvePointRepository;
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void homeTest() throws Exception {
         mockMvc.perform(get("/curvePoint/list"))
                 .andDo(MockMvcResultHandlers.print())
@@ -41,7 +41,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addCurveFormTest() throws Exception {
         mockMvc.perform(get("/curvePoint/add"))
                 .andDo(MockMvcResultHandlers.print())
@@ -50,7 +50,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addCurveTest() throws Exception {
         int initialCount = curvePointRepository.findAll().size();
 
@@ -68,7 +68,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addCurveWhenErrorInTheFormTest() throws Exception {
         int initialCount = curvePointRepository.findAll().size();
 
@@ -86,7 +86,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void showUpdateFormTest() throws Exception {
         mockMvc.perform(get("/curvePoint/update/1"))
                 .andDo(MockMvcResultHandlers.print())
@@ -95,7 +95,7 @@ public class CurvePointIT {
                 .andExpect(view().name("curvePoint/update"));
     }
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateCurveTest() throws Exception {
         CurvePoint curvePointToUpdate = new CurvePoint(2, 2d, 2d);
 
@@ -116,7 +116,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateCurveWhenErrorInTheFormTest() throws Exception {
         mockMvc.perform(post("/curvePoint/update/1")
                         .param("term", "2")
@@ -132,7 +132,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateCurveWhenCurveDoesNotExistTest() throws Exception {
         mockMvc.perform(post("/curvePoint/update/10")
                         .param("curveId", "2")
@@ -147,7 +147,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteCurveTest() throws Exception {
         int initialCount = curvePointRepository.findAll().size();
 
@@ -161,7 +161,7 @@ public class CurvePointIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteCurveWhenCurveIsNotFoundTest() throws Exception {
         int initialCount = curvePointRepository.findAll().size();
 

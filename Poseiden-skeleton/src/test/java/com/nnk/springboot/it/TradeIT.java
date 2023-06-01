@@ -30,7 +30,7 @@ public class TradeIT {
     private TradeRepository tradeRepository;
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void homeTest() throws Exception {
         mockMvc.perform(get("/trade/list"))
                 .andDo(MockMvcResultHandlers.print())
@@ -41,7 +41,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addTradeFormTest() throws Exception {
         mockMvc.perform(get("/trade/add"))
                 .andDo(MockMvcResultHandlers.print())
@@ -50,7 +50,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addTradeTest() throws Exception {
         int initialCount = tradeRepository.findAll().size();
 
@@ -68,7 +68,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addTradeWhenErrorInTheFormTest() throws Exception {
         int initialCount = tradeRepository.findAll().size();
 
@@ -86,7 +86,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void showUpdateFormTest() throws Exception {
         mockMvc.perform(get("/trade/update/1"))
                 .andDo(MockMvcResultHandlers.print())
@@ -95,7 +95,7 @@ public class TradeIT {
                 .andExpect(view().name("trade/update"));
     }
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateTradeTest() throws Exception {
         Trade tradeToUpdate = new Trade("testUpdateAccount", "testUpdateType", 2d);
 
@@ -116,7 +116,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateTradeWhenErrorInTheFormTest() throws Exception {
         mockMvc.perform(post("/trade/update/1")
                         .param("type", "testNotUpdateType")
@@ -132,7 +132,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateTradeWhenTradeDoesNotExistTest() throws Exception {
         mockMvc.perform(post("/trade/update/10")
                         .param("account", "testNotUpdateAccount")
@@ -147,7 +147,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteTradeTest() throws Exception {
         int initialCount = tradeRepository.findAll().size();
 
@@ -161,7 +161,7 @@ public class TradeIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteTradeWhenTradeIsNotFoundTest() throws Exception {
         int initialCount = tradeRepository.findAll().size();
 

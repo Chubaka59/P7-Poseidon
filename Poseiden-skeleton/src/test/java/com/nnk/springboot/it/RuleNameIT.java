@@ -30,7 +30,7 @@ public class RuleNameIT {
     private RuleNameRepository ruleNameRepository;
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void homeTest() throws Exception {
         mockMvc.perform(get("/ruleName/list"))
                 .andDo(MockMvcResultHandlers.print())
@@ -41,7 +41,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addRuleFormTest() throws Exception {
         mockMvc.perform(get("/ruleName/add"))
                 .andDo(MockMvcResultHandlers.print())
@@ -50,7 +50,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addRuleTest() throws Exception {
         int initialCount = ruleNameRepository.findAll().size();
 
@@ -71,7 +71,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addRuleWhenErrorInTheFormTest() throws Exception {
         int initialCount = ruleNameRepository.findAll().size();
 
@@ -92,7 +92,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void showUpdateFormTest() throws Exception {
         mockMvc.perform(get("/ruleName/update/1"))
                 .andDo(MockMvcResultHandlers.print())
@@ -101,7 +101,7 @@ public class RuleNameIT {
                 .andExpect(view().name("ruleName/update"));
     }
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateRuleTest() throws Exception {
         RuleName ruleNameToUpdate = new RuleName("testUpdateName", "testUpdateDescription", "testUpdateJson", "testUpdateTemplate", "testUpdateSqlStr", "testUpdateSqlPart");
 
@@ -125,7 +125,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateRuleWhenErrorInTheFormTest() throws Exception {
         mockMvc.perform(post("/ruleName/update/1")
                         .param("description", "testNotUpdateDescription")
@@ -144,7 +144,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateRuleWhenRuleDoesNotExistTest() throws Exception {
         mockMvc.perform(post("/ruleName/update/10")
                         .param("name", "testNotUpdateName")
@@ -162,7 +162,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteRuleTest() throws Exception {
         int initialCount = ruleNameRepository.findAll().size();
 
@@ -176,7 +176,7 @@ public class RuleNameIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteRuleWhenRuleIsNotFoundTest() throws Exception {
         int initialCount = ruleNameRepository.findAll().size();
 

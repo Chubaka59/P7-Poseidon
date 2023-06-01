@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +30,6 @@ public class UserIT {
     private UserRepository userRepository;
 
     @Test
-    @WithUserDetails
     public void homeTest() throws Exception {
         mockMvc.perform(get("/user/list"))
                 .andDo(MockMvcResultHandlers.print())
@@ -41,7 +39,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void addUserFormTest() throws Exception {
         mockMvc.perform(get("/user/add"))
                 .andDo(MockMvcResultHandlers.print())
@@ -50,7 +47,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void addUserTest() throws Exception {
         // GIVEN
         int initialCount = userRepository.findAll().size();
@@ -71,7 +67,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void addUserWhenErrorInTheFormTest() throws Exception {
         int initialCount = userRepository.findAll().size();
 
@@ -89,7 +84,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void addUserWhenUserAlreadyExist() throws Exception {
         int initialCount = userRepository.findAll().size();
 
@@ -108,7 +102,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void showUpdateFormTest() throws Exception {
         mockMvc.perform(get("/user/update/1"))
                 .andDo(MockMvcResultHandlers.print())
@@ -117,7 +110,6 @@ public class UserIT {
                 .andExpect(view().name("user/update"));
     }
     @Test
-    @WithUserDetails
     public void updateUserTest() throws Exception {
         User userToUpdate = new User(null, "test", "test", "test", "test");
 
@@ -139,7 +131,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void updateUserWhenErrorInTheFormTest() throws Exception {
         mockMvc.perform(post("/user/update/1")
                         .param("password", "testNotUpdated")
@@ -156,7 +147,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void updateUserWhenUserDoesNotExistTest() throws Exception {
         mockMvc.perform(post("/user/update/10")
                         .param("username", "testNotUpdated")
@@ -172,7 +162,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void updateUserWhenUsernameIsAlreadyUsed() throws Exception {
         mockMvc.perform(post("/user/update/2")
                         .param("username", "testUsername")
@@ -191,7 +180,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void deleteUserTest() throws Exception {
         int initialCount = userRepository.findAll().size();
 
@@ -205,7 +193,6 @@ public class UserIT {
     }
 
     @Test
-    @WithUserDetails
     public void deleteUserWhenUserIsNotFoundTest() throws Exception {
         int initialCount = userRepository.findAll().size();
 

@@ -32,7 +32,7 @@ public class BidListIT {
     private BidListRepository bidListRepository;
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void homeTest() throws Exception {
         mockMvc.perform(get("/bidList/list"))
                 .andDo(MockMvcResultHandlers.print())
@@ -43,7 +43,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addBidFormTest() throws Exception {
         mockMvc.perform(get("/bidList/add"))
                 .andDo(MockMvcResultHandlers.print())
@@ -52,7 +52,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addBidTest() throws Exception {
         // GIVEN
         int initialCount = bidListRepository.findAll().size();
@@ -72,7 +72,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void addBidWhenErrorInTheFormTest() throws Exception {
         int initialCount = bidListRepository.findAll().size();
 
@@ -89,7 +89,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void showUpdateFormTest() throws Exception {
         mockMvc.perform(get("/bidList/update/1"))
                 .andDo(MockMvcResultHandlers.print())
@@ -98,7 +98,7 @@ public class BidListIT {
                 .andExpect(view().name("bidList/update"));
     }
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateBidTest() throws Exception {
         BidList bidListToUpdate = new BidList("testUpdateAccount", "testUpdateType", 2d);
 
@@ -119,7 +119,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateBidWhenErrorInTheFormTest() throws Exception {
         mockMvc.perform(post("/bidList/update/1")
                         .param("type", "testNotUpdateType")
@@ -135,7 +135,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void updateBidWhenBidDoesNotExistTest() throws Exception {
         mockMvc.perform(post("/bidList/update/10")
                         .param("account", "testNotUpdateAccount")
@@ -150,7 +150,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteBidTest() throws Exception {
         int initialCount = bidListRepository.findAll().size();
 
@@ -164,7 +164,7 @@ public class BidListIT {
     }
 
     @Test
-    @WithUserDetails
+    @WithUserDetails("testUsername")
     public void deleteBidWhenBidIsNotFoundTest() throws Exception {
         int initialCount = bidListRepository.findAll().size();
 
