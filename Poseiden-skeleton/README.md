@@ -1,31 +1,36 @@
-# spring-boot
-## Technical:
+# Poseidon
+This app uses Java to run.
 
-1. Framework: Spring Boot v2.0.4
-2. Java 8
-3. Thymeleaf
-4. Bootstrap v.4.3.1
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+### Prerequisites
+
+- Java 17
+- Maven 3.6.2
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running:
 
 
-## Setup with Intellij IDE
-1. Create project from Initializr: File > New > project > Spring Initializr
-2. Add lib repository into pom.xml
-3. Add folders
-    - Source root: src/main/java
-    - View: src/main/resources
-    - Static: src/main/resource/static
-4. Create database with name "demo" as configuration in application.properties
-5. Run sql script to create table doc/data.sql
+1.Install Java:
 
-## Implement a Feature
-1. Create mapping domain class and place in package com.nnk.springboot.domain
-2. Create repository class and place in package com.nnk.springboot.repositories
-3. Create controller class and place in package com.nnk.springboot.controllers
-4. Create view files and place in src/main/resource/templates
+https://www.oracle.com/java/technologies/downloads/#jdk17-windows
 
-## Write Unit Test
-1. Create unit test and place in package com.nnk.springboot in folder test > java
+2.Install Maven:
 
-## Security
-1. Create user service to load user from  database and place in package com.nnk.springboot.services
-2. Add configuration class and place in package com.nnk.springboot.config
+https://maven.apache.org/install.html
+
+3.Install MySql
+
+https://www.mysql.com/downloads/
+
+### Testing
+
+The app has unit tests and integration tests written.
+
+To run the tests from maven, go to the folder that contains the pom.xml file and execute the below command.
+
+`mvn site`

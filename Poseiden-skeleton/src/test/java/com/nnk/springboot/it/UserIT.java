@@ -54,7 +54,7 @@ public class UserIT {
         // WHEN
         mockMvc.perform(post("/user/validate")
                         .param("username", "test")
-                        .param("password", "test")
+                        .param("password", "Abcd123*")
                         .param("fullname", "test")
                         .param("role", "test")
                         .with(csrf())
@@ -111,7 +111,7 @@ public class UserIT {
     }
     @Test
     public void updateUserTest() throws Exception {
-        User userToUpdate = new User(null, "test", "test", "test", "test");
+        User userToUpdate = new User(null, "test", "Abcd123*", "test", "test");
 
         mockMvc.perform(post("/user/update/1")
                         .param("username", userToUpdate.getUsername())
@@ -150,7 +150,7 @@ public class UserIT {
     public void updateUserWhenUserDoesNotExistTest() throws Exception {
         mockMvc.perform(post("/user/update/10")
                         .param("username", "testNotUpdated")
-                        .param("password", "testNotUpdated")
+                        .param("password", "Abcd123*")
                         .param("fullname", "testNotUpdated")
                         .param("role", "testNotUpdated")
                         .with(csrf())
@@ -165,7 +165,7 @@ public class UserIT {
     public void updateUserWhenUsernameIsAlreadyUsed() throws Exception {
         mockMvc.perform(post("/user/update/2")
                         .param("username", "testUsername")
-                        .param("password", "testPassword")
+                        .param("password", "Abcd123*")
                         .param("fullname", "testFullname")
                         .param("role", "testRole")
                         .with(csrf())
