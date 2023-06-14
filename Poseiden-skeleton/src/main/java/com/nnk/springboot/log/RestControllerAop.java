@@ -36,10 +36,10 @@ public class RestControllerAop {
     @Before("controller() && allMethod()")
     public void logBefore(JoinPoint joinPoint) {
 
-        log.debug("Entering in Method :  " + joinPoint.getSignature().getName());
-        log.debug("Class Name :  " + joinPoint.getSignature().getDeclaringTypeName());
-        log.debug("Arguments :  " + Arrays.toString(joinPoint.getArgs()));
-        log.debug("Target class : " + joinPoint.getTarget().getClass().getName());
+        log.info("Entering in Method :  " + joinPoint.getSignature().getName());
+        log.info("Class Name :  " + joinPoint.getSignature().getDeclaringTypeName());
+        log.info("Arguments :  " + Arrays.toString(joinPoint.getArgs()));
+        log.info("Target class : " + joinPoint.getTarget().getClass().getName());
     }
 
     //After -> All method within resource annotated with @Controller annotation
@@ -47,7 +47,7 @@ public class RestControllerAop {
     @AfterReturning(pointcut = "controller() && allMethod()", returning = "result")
     public void logAfter(JoinPoint joinPoint, Object result) {
         String returnValue = this.getValue(result);
-        log.debug("Method Return value : " + returnValue);
+        log.info("Method Return value : " + returnValue);
     }
 
     //After -> Any method within resource annotated with @Controller annotation
@@ -68,7 +68,7 @@ public class RestControllerAop {
             String methodName = joinPoint.getSignature().getName();
             Object result = joinPoint.proceed();
             long elapsedTime = System.currentTimeMillis() - start;
-            log.debug("Method " + className + "." + methodName + " ()" + " execution time : "
+            log.info("Method " + className + "." + methodName + " ()" + " execution time : "
                     + elapsedTime + " ms");
 
             return result;
