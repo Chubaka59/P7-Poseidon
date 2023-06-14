@@ -169,4 +169,19 @@ public class UserControllerTest {
         assertEquals(expectedString, actualString);
         verify(userService, times(1)).delete(anyInt());
     }
+
+    @Test
+    public void deleteUserWhenUserIsNotFound(){
+        //GIVEN the user we would delete won't be found
+        doThrow(new IllegalArgumentException("testError")).when(userService).delete(anyInt());
+        when(userService.getAll()).thenReturn(new ArrayList<>());
+        String expectedString = "/user/list";
+
+        //WHEN we try to delete the user
+        String actualString = userController.deleteUser(1, model);
+
+        //THEN the correct string is returned and the error is added to the model
+        verify(model, times(1)).addAttribute("error", "testError");
+        assertEquals(expectedString, actualString);
+    }
 }
