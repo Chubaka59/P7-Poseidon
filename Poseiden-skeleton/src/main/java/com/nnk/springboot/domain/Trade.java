@@ -54,6 +54,7 @@ public class Trade implements UpdatableEntity<Trade> {
     public Trade update(Trade entity) {
         this.account = entity.account;
         this.type = entity.type;
+        this.buyQuantity = entity.buyQuantity;
         return this;
     }
 }

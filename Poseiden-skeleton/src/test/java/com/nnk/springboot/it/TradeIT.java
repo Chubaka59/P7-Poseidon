@@ -97,7 +97,7 @@ public class TradeIT {
     @Test
     @WithUserDetails("testUsername")
     public void updateTradeTest() throws Exception {
-        Trade tradeToUpdate = new Trade("testUpdateAccount", "testUpdateType", 2d);
+        Trade tradeToUpdate = new Trade("testUpdateAccount", "testUpdateType", 5d);
 
         mockMvc.perform(post("/trade/update/1")
                         .param("account", tradeToUpdate.getAccount())
